@@ -97,7 +97,7 @@ async def detailed_clan_board(bot: CustomClient, clan: coc.Clan, server: disnake
             f'Trophies: {bot.emoji.trophy} {clan.points} | '
             f'{bot.emoji.versus_trophy} {clan.builder_base_points}\n'
             f'Requirements: {bot.emoji.trophy}{clan.required_trophies} | {bot.fetch_emoji(clan.required_townhall)}{clan.required_townhall}\n'
-            f'Type: {clan_type_converter[clan.type]}\n'
+            f'Type: {clan_type_converter[clan.type.name]}\n'
             f'Location: {flag} {location_name}\n'
             f'{rank_text}\n'
             f'Leader: {clan_leader.name}\n'
