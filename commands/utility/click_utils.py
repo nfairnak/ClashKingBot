@@ -59,15 +59,12 @@ class UtilityButtons(commands.Cog):
             base_link = results.get('link')
 
             # Extract base ID
-            if '&id=' in base_link:
-                base_id = base_link.split('&id=')[-1]
-            else:
-                base_id = base_link
+            base_id = base_link.split('&id=')[-1]
 
             # Timestamp
             click_time = datetime.utcnow()
 
-            # Save to NEW collection (create this in Mongo)
+            # Save to Mongo (optional but useful)
             await self.bot.base_clicks.insert_one({
                 "user_id": user_id,
                 "username": username,
@@ -77,11 +74,10 @@ class UtilityButtons(commands.Cog):
             })
 
             # ===============================
-            # CREATE TRACKED LINK
+            # CREATE TRACKED LINK (LIVE URL)
             # ===============================
-            tracked_link = f"https://yourdomain.com/base?u={user_id}&b={base_id}"
+            tracked_link = f"https://clashkingbot.onrender.com/base?u={user_id}&b={base_id}"
 
-            # Send ONLY to user (hidden)
             await res.send(
                 content=tracked_link,
                 ephemeral=True
@@ -97,22 +93,22 @@ class UtilityButtons(commands.Cog):
 
             if ds == []:
                 embed = disnake.Embed(
-                    description=f'No Downloads Currently.',
+                    description='No Downloads Currently.',
                     color=disnake.Color.red()
                 )
                 return await res.send(embed=embed, ephemeral=True)
 
-            else:
-                text = ''
-                for down in ds:
-                    text += '➼ ' + str(down) + '\n'
+            text = ''
+            for down in ds:
+                text += '➼ ' + str(down) + '\n'
 
-                embed = disnake.Embed(
-                    title='**Base Downloads:**',
-                    description=text,
-                    color=disnake.Color.green(),
-                )
-                return await res.send(embed=embed, ephemeral=True)
+            embed = disnake.Embed(
+                title='**Base Downloads:**',
+                description=text,
+                color=disnake.Color.green(),
+            )
+
+            return await res.send(embed=embed, ephemeral=True)
 
         # ===============================
         # ARMY SHARE (UNCHANGED)
