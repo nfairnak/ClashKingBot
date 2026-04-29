@@ -1,6 +1,6 @@
 from flask import Flask, request, redirect
 from datetime import datetime
-
+import os
 print("TRACKER STARTING...")
 
 app = Flask(__name__)
@@ -18,4 +18,15 @@ def track():
 
 if __name__ == "__main__":
     print("RUNNING SERVER...")
-    app.run(host="127.0.0.1", port=3000, debug=True)
+    app.run(
+    host="0.0.0.0",
+    port=int(os.environ.get("PORT", 3000))
+)
+import os
+
+if __name__ == "__main__":
+    print("RUNNING SERVER...")
+    app.run(
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 3000))
+    )
