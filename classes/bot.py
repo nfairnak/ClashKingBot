@@ -18,7 +18,12 @@ import ujson
 from aiocache import SimpleMemoryCache, cached
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from coc.ext import discordlinks
-from disnake.ext import commands, fluent
+try:
+    from disnake.ext import commands, fluent
+    FluentStore = fluent.FluentStore
+except ImportError:
+    from disnake.ext import commands
+    FluentStore = None
 from expiring_dict import ExpiringDict
 from redis import asyncio as redis
 
@@ -56,7 +61,13 @@ class CustomClient(commands.AutoShardedBot):
         )
         self.VERSION = '1.0.6'
 
-        self.i18n = fluent.FluentStore()
+        if FluentStore is None:
+            raise RuntimeError(
+                'Missing i18n support: disnake-ext-fluent is not installed.\n'
+                'Install with: python3 -m pip install "disnake-ext-fluent @ git+https://github.com/MagicTheDev/disnake-ext-fluent.git" fluent-runtime'
+            )
+
+        self.i18n = FluentStore()
         self.i18n.load('locales/')
 
         self.loop.create_task(kafka_events(self))
@@ -111,9 +122,13 @@ class CustomClient(commands.AutoShardedBot):
         self.emoji_hashes: collection_class = self.looper_db.clashking.emoji_hashes
         self.army_share: collection_class = self.looper_db.clashking.army_share
 
-        self.link_client: coc.ext.discordlinks.DiscordLinkClient = asyncio.get_event_loop().run_until_complete(
-            discordlinks.login(self._config.link_api_username, self._config.link_api_password)
-        )
+        if self._config.link_api_username and self._config.link_api_password:
+            self.link_client: coc.ext.discordlinks.DiscordLinkClient = asyncio.get_event_loop().run_until_complete(
+                discordlinks.login(self._config.link_api_username, self._config.link_api_password)
+            )
+        else:
+            self.link_client = None
+
         self.bot_stats: collection_class = self.looper_db.clashking.bot_stats
         self.clan_stats: collection_class = self.new_looper.clan_stats
         self.war_elo: collection_class = self.looper_db.looper.war_elo

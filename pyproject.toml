@@ -9,6 +9,8 @@ dependencies = [
     "ballpark @ git+https://github.com/Mee6/python-ballpark.git",
     "chat-exporter",
     "clashy-py",
+    "coc.py",
+    "aiohttp",
     "disnake",
     "disnake-ext-fluent @ git+https://github.com/MagicTheDev/disnake-ext-fluent.git",
     "dnspython",

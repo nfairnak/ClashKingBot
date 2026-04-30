@@ -19,8 +19,6 @@ class PlayerCommands(commands.Cog, name='Player Commands'):
     @commands.slash_command(
         name=disnake.Localized('player', key='player-name'),
         description=disnake.Localized(key='player-description'),
-        install_types=disnake.ApplicationInstallTypes.all(),
-        contexts=disnake.InteractionContextTypes.all(),
     )
     async def player(self, ctx: disnake.ApplicationCommandInteraction):
         await ctx.response.defer()

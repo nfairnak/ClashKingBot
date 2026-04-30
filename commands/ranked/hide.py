@@ -18,8 +18,6 @@ class Ranked(commands.Cog, name='Family Trophy Stats'):
     @commands.slash_command(
         name='ranked',
         description="Commands for ranked stats",
-        install_types=disnake.ApplicationInstallTypes.all(),
-        contexts=disnake.InteractionContextTypes.all(),
     )
     async def ranked(
             self,
@@ -47,8 +45,6 @@ class Ranked(commands.Cog, name='Family Trophy Stats'):
     @commands.slash_command(
         name='best-eos',
         description='Arranges players to create best clans if EOS was now',
-        install_types=disnake.ApplicationInstallTypes.all(),
-        contexts=disnake.InteractionContextTypes.all(),
     )
     async def best(
             self,

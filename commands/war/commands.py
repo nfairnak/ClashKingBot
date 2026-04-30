@@ -35,7 +35,7 @@ class War(commands.Cog):
     def __init__(self, bot: CustomClient):
         self.bot = bot
 
-    @commands.slash_command(name='war', install_types=disnake.ApplicationInstallTypes.all(), contexts=disnake.InteractionContextTypes.all())
+    @commands.slash_command(name='war')
     async def war(self, ctx: disnake.ApplicationCommandInteraction):
         pass
 
@@ -294,10 +294,7 @@ class War(commands.Cog):
             )
 
     # CWL COMMANDS
-    @commands.slash_command(name='cwl',
-                            install_types=disnake.ApplicationInstallTypes.all(),
-                            contexts=disnake.InteractionContextTypes.all(),
-    )
+    @commands.slash_command(name='cwl')
     async def cwl(self, ctx: disnake.ApplicationCommandInteraction):
         await ctx.response.defer()
 

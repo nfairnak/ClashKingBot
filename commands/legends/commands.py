@@ -26,8 +26,6 @@ class Legends(commands.Cog):
     @commands.slash_command(
         name='legends',
         description=disnake.Localized(key='legends-description'),
-        install_types=disnake.ApplicationInstallTypes.all(),
-        contexts=disnake.InteractionContextTypes.all(),
     )
     async def legends(self, ctx: disnake.ApplicationCommandInteraction):
         await ctx.response.defer()

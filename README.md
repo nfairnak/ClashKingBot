@@ -93,7 +93,24 @@ Additional dependencies can be found in [requirements.txt](https://github.com/Cl
 
 1. [Invite ClashKingBot](https://discord.com/application-directory/824653933347209227) to your server.
 2. Review the [Quick Start Guide](https://docs.clashk.ing/quick-start) for initial setup.
-3. Adjust settings and commands as needed.
+3. Install Python 3.13 or newer, then run the local setup script:
+
+```bash
+cd /Users/nicholasfairnak/Desktop/Clashking/ClashKingBot
+bash setup_venv.sh
+```
+
+4. Put your token in a `.env` file at the project root:
+
+```env
+BOT_TOKEN=your_discord_bot_token
+```
+
+5. Start the bot:
+
+```bash
+bash run.sh
+```
 
 <p align="right"><a href="#top">Back to Top ↑</a></p>
 
