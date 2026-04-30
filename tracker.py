@@ -2,6 +2,12 @@ from flask import Flask, request, redirect
 from datetime import datetime
 import requests
 import pytz
+import os  # Add at top
+
+# In the auth function:
+@auth.verify_password
+def verify_password(username, password):
+    return username == os.getenv('LINK_API_USER') and password == os.getenv('LINK_API_PW')
 
 app = Flask(__name__)
 
