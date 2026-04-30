@@ -1,3 +1,6 @@
+import os
+from urllib.parse import parse_qs, urlparse, quote
+
 import disnake
 from disnake.ext import commands
 
@@ -121,6 +124,63 @@ class LinkButtonExtended(commands.Cog):
                 color=disnake.Color.green(),
             )
             await ctx.send(embed=embed, ephemeral=True)
+
+        elif ctx.data.custom_id == 'link':
+            await ctx.response.defer(ephemeral=True)
+
+            base_data = await self.bot.bases.find_one(
+                {'message_id': ctx.message.id}
+            )
+
+            if not base_data:
+                return await ctx.send(
+                    content='Could not find this base link.',
+                    ephemeral=True,
+                )
+
+            base_id = base_data.get('base_id')
+
+            # Fallback for old base posts that do not have base_id saved yet
+            if not base_id:
+                original_link = base_data.get('link')
+
+                if original_link:
+                    parsed_url = urlparse(original_link)
+                    query_params = parse_qs(parsed_url.query)
+                    base_id = query_params.get('id', [None])[0]
+
+            if not base_id:
+                return await ctx.send(
+                    content='Could not generate tracked link for this base.',
+                    ephemeral=True,
+                )
+
+            tracker_url = os.getenv('TRACKER_URL')
+
+            if not tracker_url:
+                return await ctx.send(
+                    content='Tracker URL is not configured.',
+                    ephemeral=True,
+                )
+
+            tracked_link = (
+                f"{tracker_url.rstrip('/')}/base"
+                f"?u={ctx.author.id}"
+                f"&b={quote(base_id, safe='')}"
+            )
+
+            await self.bot.bases.update_one(
+                {'message_id': ctx.message.id},
+                {
+                    '$inc': {'downloads': 1},
+                    '$addToSet': {'downloaders': ctx.author.id},
+                }
+            )
+
+            await ctx.send(
+                content=f'🔗 **Base Link:**\n{tracked_link}',
+                ephemeral=True,
+            )
 
         elif ctx.data.custom_id == 'Start Link':
             db_server = await self.bot.ck_client.get_server_settings(server_id=ctx.guild.id)
@@ -265,3 +325,7 @@ class LinkButtonExtended(commands.Cog):
             )
             embed2.set_image(url='https://clashking.b-cdn.net/clash-assets/bot/api_token_help.png')
             await ctx.send(embeds=[embed, embed2], ephemeral=True)
+
+
+def setup(bot: CustomClient):
+    bot.add_cog(LinkButtonExtended(bot))

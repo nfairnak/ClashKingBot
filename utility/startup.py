@@ -81,35 +81,11 @@ def create_config() -> 'Config':
         response.raise_for_status()
         bot_config = response.json()
     except requests.RequestException as exc:
-        print('WARNING: Remote bot config fetch failed; falling back to local environment config.')
-        bot_config = {
-            'discord_proxy_url': getenv('DISCORD_PROXY_URL'),
-            'link_api_user': getenv('LINK_API_USER'),
-            'link_api_pw': getenv('LINK_API_PW'),
-            'static_db': getenv('STATIC_MONGODB', 'mongodb://127.0.0.1:27017'),
-            'stats_db': getenv('STATS_MONGODB', 'mongodb://127.0.0.1:27017'),
-            'sentry_dsn': getenv('SENTRY_DSN'),
-            'redis_ip': getenv('REDIS_IP', '127.0.0.1'),
-            'redis_pw': getenv('REDIS_PW', ''),
-            'bunny_api_token': getenv('BUNNY_API_TOKEN'),
-            'portainer_ip': getenv('PORTAINER_IP'),
-            'portainer_api_token': getenv('PORTAINER_API_TOKEN'),
-            'portainer_user': getenv('PORTAINER_USER'),
-            'portainer_password': getenv('PORTAINER_PASSWORD'),
-            'reddit_secret': getenv('REDDIT_SECRET'),
-            'reddit_pw': getenv('REDDIT_PASSWORD'),
-            'is_beta': getenv('IS_BETA', '1') == '1',
-            'is_custom': getenv('IS_CUSTOM', '1') == '1',
-            'is_main': getenv('IS_MAIN', '0') == '1',
-            'total_clusters': int(getenv('TOTAL_CLUSTERS', '1')),
-            'clashofstats_user_agent': getenv('CLASHOFSTATS_USER_AGENT'),
-            'gitbook_token': getenv('GITBOOK_TOKEN'),
-            'open_ai_key': getenv('OPEN_AI_KEY'),
-            'emoji_version': getenv('EMOJI_VERSION'),
-            'websocket_url': getenv('WEBSOCKET_URL'),
-        }
-        if getenv('DEBUG', '0') == '1':
-            print(f'Falling back local config: {bot_config}')
+        raise RuntimeError(
+            'Unable to load bot configuration from the remote server.\n'
+            'Check that BOT_TOKEN is set correctly and that you have internet access.\n'
+            f'Underlying error: {exc}'
+        ) from exc
 
     config = Config(remote_settings=bot_config)
     config.bot_token = BOT_TOKEN
