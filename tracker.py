@@ -13,6 +13,10 @@ def home():
     return "tracker alive"
 
 @app.route("/base")
+def track():
+    user_id = request.args.get("u")
+    base_id = request.args.get("b")
+
     # Convert UTC to EST
     utc_time = datetime.utcnow()
     est = pytz.timezone('US/Eastern')
@@ -28,6 +32,15 @@ def home():
     log_message = f"📅 **Date:** {day}, {time_str} EST\n👤 **User:** <@{user_id}>\n📊 **Clicks:** {click_count}"
 
     print(f"CLICK: User {user_id} clicked base {base_id} at {utc_time}", flush=True)
+
+    # Send to Discord webhook
+    webhook_url = "YOUR_WEBHOOK_URL"  # Replace with your actual Discord webhook URL
+    data = {"content": log_message}
+    requests.post(webhook_url, json=data)
+
+    return redirect(
+        f"https://link.clashofclans.com/en?action=OpenLayout&id={base_id}"
+    )
     timestamp = datetime.utcnow()
     log_message = f"CLICK: User {user_id} clicked base {base_id} at {timestamp}"
 
