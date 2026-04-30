@@ -11,7 +11,7 @@ from utility.components import create_components
 from utility.constants import SUPER_TROOPS
 from utility.discord_utils import interaction_handler
 
-from .click_utils import UtilityButtons
+from .click import UtilityButtons
 from .utils import army_embed, clan_boost_embeds, super_troop_embed
 from hashids import Hashids
 
@@ -24,6 +24,8 @@ class UtilityCommands(UtilityButtons, commands.Cog, name='Utility'):
     @commands.slash_command(
         name='army',
         description='Create & share visual representations of an army link',
+        install_types=disnake.ApplicationInstallTypes.all(),
+        contexts=disnake.InteractionContextTypes.all(),
     )
     async def army(self, ctx: disnake.ApplicationCommandInteraction):
         pass

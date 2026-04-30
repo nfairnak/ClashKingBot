@@ -122,13 +122,9 @@ class CustomClient(commands.AutoShardedBot):
         self.emoji_hashes: collection_class = self.looper_db.clashking.emoji_hashes
         self.army_share: collection_class = self.looper_db.clashking.army_share
 
-        if self._config.link_api_username and self._config.link_api_password:
-            self.link_client: coc.ext.discordlinks.DiscordLinkClient = asyncio.get_event_loop().run_until_complete(
-                discordlinks.login(self._config.link_api_username, self._config.link_api_password)
-            )
-        else:
-            self.link_client = None
-
+        self.link_client: coc.ext.discordlinks.DiscordLinkClient = asyncio.get_event_loop().run_until_complete(
+            discordlinks.login(self._config.link_api_username, self._config.link_api_password)
+        )
         self.bot_stats: collection_class = self.looper_db.clashking.bot_stats
         self.clan_stats: collection_class = self.new_looper.clan_stats
         self.war_elo: collection_class = self.looper_db.looper.war_elo

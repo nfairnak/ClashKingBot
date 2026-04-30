@@ -1,4 +1,3 @@
-import os
 import coc
 
 
@@ -13,13 +12,5 @@ async def coc_login():
         raw_attribute=True,
         stats_max_size=10_000,
     )
-
-    coc_tokens = os.getenv('COC_TOKENS')
-    if coc_tokens:
-        tokens = [token.strip() for token in coc_tokens.split(',') if token.strip()]
-        if tokens:
-            await coc_client.login_with_tokens(*tokens)
-    else:
-        print('WARNING: No COC tokens provided; starting without COC login.')
-
+    await coc_client.login_with_tokens(*['who needs this lol'])
     return coc_client
