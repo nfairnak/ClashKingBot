@@ -6,4 +6,4 @@ venv
 .venv/
 .idea
 *.iml
-*.xml
+*.xml.env
